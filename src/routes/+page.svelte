@@ -1,4 +1,5 @@
 <script>
+	import ColorPanel from '../components/colorPanel.svelte';
 	import Renderer from '../components/renderer.svelte';
 
 	let pixels = Array(64).fill('#000000');
@@ -15,7 +16,7 @@
 		>
 	</div>
 	<div class="w-full bg-base-100">
-		<Renderer {pixels} changePixel={(i) => pixels[i] = selectedColor} />
+		<Renderer {pixels} changePixel={(i) => (pixels[i] = selectedColor)} />
 	</div>
-	<div class="w-32 bg-base-100">1</div>
+	<div class="bg-base-100"><ColorPanel /></div>
 </div>
