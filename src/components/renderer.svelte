@@ -1,10 +1,13 @@
 <script lang="ts">
-	export let pixels: string[];
+	import type Frame from '../document/frame';
+
+	export let frame: Frame;
+
+	$: pixels = frame.asColorArray().map((c) => c.toRGBAHex() || '#00000000');
+	$: width = frame.width;
+	$: height = frame.height;
 
 	export let changePixel: (i: number) => void;
-
-	export let width = 8;
-	export let height = 8;
 
 	function globalKeyDown(e: KeyboardEvent) {
 		if (e.key === ' ') {
@@ -44,7 +47,6 @@
 	}
 
 	function rendererOnWheel(e: WheelEvent) {
-		console.log(e);
 		zoom -= e.deltaY / 1000;
 	}
 
@@ -101,7 +103,7 @@
 						on:focus={() => {
 							/**/
 						}}
-						style="background-color: {pixels[y * width + x]}"
+						style={`background-color: ${pixels[y * width + x]}; background-image: url('/assets/checkerboard.svg');`}
 					/>
 				{/each}
 			</div>

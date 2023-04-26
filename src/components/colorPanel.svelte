@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Color from '../drawing/color';
 	import { HslToRgbFn, RgbToHsl } from '../util/colorConversion';
 	import HslColorPicker from './hslColorPicker.svelte';
 	let hue = 0;
@@ -9,6 +10,8 @@
 	$: b = Math.round(HslToRgbFn(4, hue, saturation, lightness) * 255);
 
 	export let hex = '#000000';
+  export let color = new Color(0, 0, 0, 255);
+  $: color = new Color(r, g, b, 255);
 
 	$: hex = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
 
@@ -65,9 +68,9 @@
 			</div>
 		</div>
 	</div>
-		<div>
-			Hex: <code>{hex}</code>
-		</div>
+	<div>
+		Hex: <code>{hex}</code>
+	</div>
 </div>
 
 <style>
