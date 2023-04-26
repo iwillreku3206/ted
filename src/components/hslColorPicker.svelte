@@ -13,7 +13,6 @@
 		hue = Math.min(Math.max(x - left, 0), 360);
 		saturation = Math.abs(100 - Math.min(Math.max((y - top) / 2, 0), 100));
 
-		console.log({ left, top, x, y, hue, saturation });
 	};
 
 	const onMouseDown = (e: MouseEvent) => {
