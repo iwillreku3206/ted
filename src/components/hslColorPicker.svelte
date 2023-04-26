@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { colord } from 'colord';
-
 	let mouseDown = false;
 	let picker: HTMLDivElement;
 
@@ -13,7 +11,7 @@
 		const left = picker.offsetLeft;
 		const top = picker.offsetTop;
 		hue = Math.min(Math.max(x - left, 0), 360);
-		saturation = Math.min(Math.max((y - top) / 2, 0), 100);
+		saturation = Math.abs(100 - Math.min(Math.max((y - top) / 2, 0), 100));
 
 		console.log({ left, top, x, y, hue, saturation });
 	};
@@ -35,7 +33,7 @@
 		}
 	};
 
-	$: bgStyle = `
+	$: hslBg1Style = `
 		background: linear-gradient(
 				to right,
 				hsl(0, 100%, ${lightness}%),
@@ -45,32 +43,64 @@
 				hsl(240, 100%, ${lightness}%),
 				hsl(300, 100%, ${lightness}%),
 				hsl(360, 100%, ${lightness}%)
-			),
-			linear-gradient(to bottom, hsl(0, 0%, ${lightness}%), hsl(0, 100%, ${lightness}%));
+			)
 	`;
+
+	$: hslBg2Style = `
+    background: linear-gradient(
+        to bottom,
+        hsla(0, 0%, ${lightness}%, 0),
+        hsla(0, 0%, ${lightness}%, 1)
+      )
+  `;
 </script>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
-<div
-	class="color-picker"
-	style={bgStyle}
-	bind:this={picker}
-	on:mouseup={onMouseUp}
-	on:mousemove={onMouseMove}
-	on:mousedown={onMouseDown}
->
-	<div class="cursor" style={`left: ${hue - 7}px; top: ${2 * saturation - 7}px;`} />
+<div>
+	<div
+		class="color-picker-hsl"
+		style={hslBg1Style}
+		bind:this={picker}
+		on:mouseup={onMouseUp}
+		on:mousemove={onMouseMove}
+		on:mousedown={onMouseDown}
+	>
+		<div style={hslBg1Style} class="color-picker-hsl-bg" />
+		<div style={hslBg2Style} class="color-picker-hsl-bg" />
+		<div
+			class="cursor"
+			style={`left: ${hue - 7}px; top: ${2 * Math.abs(100 - saturation) - 7}px;`}
+		/>
+	</div>
 </div>
+<input
+	type="range"
+	min="0"
+	max="100"
+	class="slider w-full h-2"
+	style={`background: linear-gradient(to right, hsl(${hue.toFixed(0)}, ${saturation.toFixed(
+		0
+	)}%, 0%), hsl(${hue.toFixed(0)}, ${saturation.toFixed(0)}%, 50%), hsl(${hue.toFixed(
+		0
+	)}, ${saturation.toFixed(0)}%, 100%))`}
+	bind:value={lightness}
+/>
 
 <div style="--lightness:{lightness}" />
 
 <style>
-	.color-picker {
+	.color-picker-hsl {
 		width: 360px;
 		height: 200px;
 
 		background-blend-mode: hue;
+	}
+
+	.color-picker-hsl-bg {
+		position: absolute;
+		width: 360px;
+		height: 200px;
 	}
 
 	.cursor {
@@ -81,5 +111,9 @@
 		border: 3px solid black;
 		outline: 2px solid white;
 		pointer-events: none;
+	}
+	.slider {
+		appearance: none;
+		-webkit-appearance: none;
 	}
 </style>

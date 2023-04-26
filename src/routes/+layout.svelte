@@ -3,7 +3,7 @@
 	import Menubar from '../components/menubar.svelte';
 </script>
 
-<main class="h-screen min-h-screen">
+<main class="h-screen max-h-screen min-h-screen flex flex-col">
 	<Menubar
 		items={[
 			{

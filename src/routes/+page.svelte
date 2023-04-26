@@ -3,20 +3,14 @@
 	import Renderer from '../components/renderer.svelte';
 
 	let pixels = Array(64).fill('#000000');
+
 	let selectedColor = '#000000';
 </script>
 
-<div class="h-full min-h-screen flex flex-row gap-1 bg-base-200">
-	<div class="w-fit bg-base-100">
-		<input type="color" bind:value={selectedColor} />
-		<button
-			on:click={() => {
-				console.log(selectedColor);
-			}}>test</button
-		>
-	</div>
+<div class="flex flex-row gap-1 bg-base-200 h-full">
+	<div class="w-fit bg-base-100">Tools</div>
 	<div class="w-full bg-base-100">
 		<Renderer {pixels} changePixel={(i) => (pixels[i] = selectedColor)} />
 	</div>
-	<div class="bg-base-100"><ColorPanel /></div>
+	<div class="bg-base-100"><ColorPanel bind:hex={selectedColor} /></div>
 </div>
