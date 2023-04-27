@@ -79,6 +79,7 @@
 		{#each { length: height } as _, y}
 			<div class="flex flex-row">
 				{#each { length: width } as _, x}
+        <div style="background-image: url('/assets/checkerboard.svg');">
 					<div
 						class="w-12 h-12 border-r-1/2 border-b-1/2 border-gray-300"
 						on:click={() => changePixel(y * width + x)}
@@ -103,8 +104,11 @@
 						on:focus={() => {
 							/**/
 						}}
-						style={`background-color: ${pixels[y * width + x]}; background-image: url('/assets/checkerboard.svg');`}
+						style={`background-color: ${
+							pixels[y * width + x]
+						}; `}
 					/>
+          </div>
 				{/each}
 			</div>
 		{/each}
