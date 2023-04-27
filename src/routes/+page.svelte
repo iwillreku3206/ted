@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ColorPanel from '../components/colorPanel.svelte';
+	import FrameSelector from '../components/frameSelector.svelte';
 	import Renderer from '../components/renderer.svelte';
 	import Document from '../document/document';
 	import Color from '../drawing/color';
@@ -14,7 +15,7 @@
 		Tools
 		<button on:click={() => console.log(workingDocument)}>Debug</button>
 	</div>
-	<div class="w-full bg-base-100">
+	<div class="w-full bg-base-100 flex flex-col">
 		<Renderer
 			frame={workingDocument.frames.getFrame(0, 0)}
 			changePixel={(i) => {
@@ -25,6 +26,7 @@
 				workingDocument = workingDocument;
 			}}
 		/>
+    <FrameSelector {workingDocument} />
 	</div>
 	<div class="bg-base-100"><ColorPanel bind:color={selectedColor} /></div>
 </div>

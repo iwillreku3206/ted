@@ -1,0 +1,64 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import type Document from '../document/document';
+
+	export let defaultFrameX = 0;
+	export let defaultFrameY = 0;
+
+	export let workingDocument: Document;
+
+	export let scale = 1;
+
+	export let x = defaultFrameX;
+	export let y = defaultFrameY;
+
+	let imageData: string[] = [];
+
+	function updateImageData() {
+		workingDocument.frames.frames.forEach((row, y) => {
+			row.forEach((_, x) => {
+				const canvas = new OffscreenCanvas(workingDocument.width, workingDocument.height);
+				const ctx = canvas.getContext('2d');
+				if (!ctx) return;
+				const data = ctx.getImageData(0, 0, workingDocument.width, workingDocument.height);
+
+				workingDocument.frames.getFrame(x, y).data.forEach((byte, i) => {
+					data.data[i] = byte;
+				});
+				ctx.putImageData(data, 0, 0);
+
+				canvas.convertToBlob().then((blob) => {
+					const url = URL.createObjectURL(blob);
+					imageData[y * workingDocument.frames.width + x] = url.toString();
+				});
+			});
+		});
+
+    imageData = imageData
+
+		return true;
+	}
+
+	onMount(() => {
+		updateImageData();
+	});
+</script>
+
+<button on:click={updateImageData}>Update</button>
+<input type="range" bind:value={scale} min="1" max="10" step="1" />
+
+<div class="flex flex-col">
+	{#each { length: workingDocument.frames.height } as _, imageY}
+		<div class="flex flex-row">
+			{#each { length: workingDocument.frames.width } as _, imageX}
+				<div>
+					<img
+						width={workingDocument.width * scale}
+						height={workingDocument.height * scale}
+						src={imageData[imageY * workingDocument.frames.width + imageX]}
+					/>
+				</div>
+			{/each}
+		</div>
+	{/each}
+</div>
