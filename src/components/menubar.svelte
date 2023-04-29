@@ -20,7 +20,7 @@
 	export let items: MenuBarItem[];
 </script>
 
-<header>
+<header class="z-50">
 	<ul class="menu menu-compact menu-horizontal bg-base-200 w-full min-w-screen">
 		{#each items as item}
 			<li>
