@@ -12,11 +12,10 @@
 
 	let x = defaultFrameX;
 	let y = defaultFrameY;
-  
-  export let currentFrame;
+
+	export let currentFrame;
 
 	$: currentFrame = { x, y };
-	
 
 	$: workingDocument && updateImageData();
 
@@ -63,9 +62,9 @@
 
 <button on:click={() => console.log(imageData)}>test</button>
 
-<div class="flex flex-col">
+<div class="flex flex-col gap-2">
 	{#each { length: workingDocument.frames.height } as _, imageY}
-		<div class="flex flex-row">
+		<div class="flex flex-row gap-2">
 			{#each { length: workingDocument.frames.width } as _, imageX}
 				<div>
 					<img
@@ -88,5 +87,6 @@
 <style>
 	.preview-image {
 		image-rendering: pixelated;
+		background: url('/assets/checkerboard.svg');
 	}
 </style>
