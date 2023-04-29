@@ -7,7 +7,7 @@
 
 	let workingDocument = new Document(16, 16);
 
-	let selectedColor: Color = new Color(0, 0, 0, 255);
+	let selectedColor: Color = new Color(255, 0, 0, 255);
 </script>
 
 <div class="flex flex-row gap-1 bg-base-200 h-full">
@@ -26,7 +26,7 @@
 				workingDocument = workingDocument;
 			}}
 		/>
-    <FrameSelector {workingDocument} />
+		<FrameSelector {workingDocument} />
 	</div>
 	<div class="bg-base-100"><ColorPanel bind:color={selectedColor} /></div>
 </div>

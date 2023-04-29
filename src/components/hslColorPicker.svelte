@@ -1,18 +1,17 @@
 <script lang="ts">
+	import type Color from '../drawing/color';
+
 	let mouseDown = false;
 	let picker: HTMLDivElement;
 
-	export let hue = 0;
-	export let saturation = 100;
-	export let lightness = 50;
+	export let color: Color;
 
 	const setPos = (x: number, y: number) => {
 		if (!picker.parentElement) return;
 		const left = picker.offsetLeft;
 		const top = picker.offsetTop;
-		hue = Math.min(Math.max(x - left, 0), 360);
-		saturation = Math.abs(100 - Math.min(Math.max((y - top) / 2, 0), 100));
-
+		color.h = Math.min(Math.max(x - left, 0), 360);
+		color.s = Math.abs(100 - Math.min(Math.max((y - top) / 2, 0), 100));
 	};
 
 	const onMouseDown = (e: MouseEvent) => {
@@ -35,21 +34,21 @@
 	$: hslBg1Style = `
 		background: linear-gradient(
 				to right,
-				hsl(0, 100%, ${lightness}%),
-				hsl(60, 100%, ${lightness}%),
-				hsl(120, 100%, ${lightness}%),
-				hsl(180, 100%, ${lightness}%),
-				hsl(240, 100%, ${lightness}%),
-				hsl(300, 100%, ${lightness}%),
-				hsl(360, 100%, ${lightness}%)
+				hsl(0, 100%, ${color.l}%),
+				hsl(60, 100%, ${color.l}%),
+				hsl(120, 100%, ${color.l}%),
+				hsl(180, 100%, ${color.l}%),
+				hsl(240, 100%, ${color.l}%),
+				hsl(300, 100%, ${color.l}%),
+				hsl(360, 100%, ${color.l}%)
 			)
 	`;
 
 	$: hslBg2Style = `
     background: linear-gradient(
         to bottom,
-        hsla(0, 0%, ${lightness}%, 0),
-        hsla(0, 0%, ${lightness}%, 1)
+        hsla(0, 0%, ${color.l}%, 0),
+        hsla(0, 0%, ${color.l}%, 1)
       )
   `;
 </script>
@@ -69,7 +68,7 @@
 		<div style={hslBg2Style} class="color-picker-hsl-bg" />
 		<div
 			class="cursor"
-			style={`left: ${hue - 7}px; top: ${2 * Math.abs(100 - saturation) - 7}px;`}
+			style={`left: ${color.h - 7}px; top: ${2 * Math.abs(100 - color.s) - 7}px;`}
 		/>
 	</div>
 </div>
@@ -78,15 +77,13 @@
 	min="0"
 	max="100"
 	class="slider w-full h-2"
-	style={`background: linear-gradient(to right, hsl(${hue.toFixed(0)}, ${saturation.toFixed(
+	style={`background: linear-gradient(to right, hsl(${color.h.toFixed(0)}, ${color.s.toFixed(
 		0
-	)}%, 0%), hsl(${hue.toFixed(0)}, ${saturation.toFixed(0)}%, 50%), hsl(${hue.toFixed(
+	)}%, 0%), hsl(${color.h.toFixed(0)}, ${color.s.toFixed(0)}%, 50%), hsl(${color.h.toFixed(
 		0
-	)}, ${saturation.toFixed(0)}%, 100%))`}
-	bind:value={lightness}
+	)}, ${color.s.toFixed(0)}%, 100%))`}
+	bind:value={color.l}
 />
-
-<div style="--lightness:{lightness}" />
 
 <style>
 	.color-picker-hsl {

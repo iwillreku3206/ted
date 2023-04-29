@@ -1,9 +1,77 @@
-import { HslToRgbFn } from "../util/colorConversion";
+import { RgbToHsl } from '../util/colorConversion';
+import { HslToRgbFn } from '../util/colorConversion';
 
 export default class Color {
-  public r: number;
-  public g: number;
-  public b: number;
+  private _r: number;
+  private _g: number;
+  private _b: number;
+  private _h: number;
+  private _s: number;
+  private _l: number;
+
+  public set r(value: number) {
+    this._r = value;
+    const hsl = RgbToHsl(this._r, this._g, this._b);
+    this._h = Math.round(hsl.h);
+    this._s = Math.round(hsl.s);
+    this._l = Math.round(hsl.l);
+  }
+  public get r() {
+    return this._r;
+  }
+
+  public set g(value: number) {
+    this._g = value;
+    const hsl = RgbToHsl(this._r, this._g, this._b);
+    this._h = Math.round(hsl.h);
+    this._s = Math.round(hsl.s);
+    this._l = Math.round(hsl.l);
+  }
+  public get g() {
+    return this._g;
+  }
+
+  public set b(value: number) {
+    this._b = value;
+    const hsl = RgbToHsl(this._r, this._g, this._b);
+    this._h = Math.round(hsl.h);
+    this._s = Math.round(hsl.s);
+    this._l = Math.round(hsl.l);
+  }
+  public get b() {
+    return this._b;
+  }
+
+  public set h(value: number) {
+    this._h = value;
+    this._r = Math.round(255 * HslToRgbFn(0, this._h, this._s, this._l));
+    this._g = Math.round(255 * HslToRgbFn(8, this._h, this._s, this._l));
+    this._b = Math.round(255 * HslToRgbFn(4, this._h, this._s, this._l));
+  }
+  public get h() {
+    return this._h;
+  }
+
+  public set s(value: number) {
+    this._s = value;
+    this._r = Math.round(255 * HslToRgbFn(0, this._h, this._s, this._l));
+    this._g = Math.round(255 * HslToRgbFn(8, this._h, this._s, this._l));
+    this._b = Math.round(255 * HslToRgbFn(4, this._h, this._s, this._l));
+  }
+  public get s() {
+    return this._s;
+  }
+
+  public set l(value: number) {
+    this._l = value;
+    this._r = Math.round(255 * HslToRgbFn(0, this._h, this._s, this._l));
+    this._g = Math.round(255 * HslToRgbFn(8, this._h, this._s, this._l));
+    this._b = Math.round(255 * HslToRgbFn(4, this._h, this._s, this._l));
+  }
+  public get l() {
+    return this._l;
+  }
+
   public a: number;
 
   constructor(r: number, g: number, b: number, a: number) {
@@ -11,6 +79,19 @@ export default class Color {
     this.g = g;
     this.b = b;
     this.a = a;
+
+    this._r = r;
+    this._g = g;
+    this._b = b;
+
+    const hsl = RgbToHsl(r, g, b);
+    this.h = hsl.h;
+    this.s = hsl.s;
+    this.l = hsl.l;
+
+    this._h = hsl.h;
+    this._s = hsl.s;
+    this._l = hsl.l;
   }
 
   public static fromHex(hex: string): Color {
@@ -57,53 +138,22 @@ export default class Color {
   }
 
   public toRGBAHex() {
-    return `#${this.r.toString(16).padStart(2, "0")}${this.g
+    return `#${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b
       .toString(16)
-      .padStart(2, "0")}${this.b.toString(16).padStart(2, "0")}${this.a
-        .toString(16)
-        .padStart(2, "0")}`;
+      .padStart(2, '0')}${this.a.toString(16).padStart(2, '0')}`;
   }
 
   public toRGBHex() {
-    return `#${this.r.toString(16).padStart(2, "0")}${this.g
+    return `#${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b
       .toString(16)
-      .padStart(2, "0")}${this.b.toString(16).padStart(2, "0")}`;
+      .padStart(2, '0')}`;
   }
 
   public toHSL() {
-    const r = this.r / 255;
-    const g = this.g / 255;
-    const b = this.b / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    let h = 0;
-    let s = 0;
-
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-      switch (max) {
-        case r:
-          h = (g - b) / d + (g < b ? 6 : 0);
-          break;
-        case g:
-          h = (b - r) / d + 2;
-          break;
-        case b:
-          h = (r - g) / d + 4;
-          break;
-      }
-
-      h /= 6;
-    }
-
-    return { h: h * 360, s: s * 100, l: l * 100 };
+    return { h: this.h, s: this.s, l: this.l };
   }
 
   public toHSLA() {
-    const hsl = this.toHSL();
-    return { h: hsl.h, s: hsl.s, l: hsl.l, a: this.a };
+    return { h: this.h, s: this.s, l: this.l, a: this.a };
   }
 }
