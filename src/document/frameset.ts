@@ -6,7 +6,14 @@ export default class Frameset {
   public height: number;
 
   constructor(width: number, height: number, imageWidth: number, imageHeight: number) {
-    this.frames = Array(height).fill(Array(width).fill(new Frame(imageWidth, imageHeight)));
+    this.frames = []
+    for (let y = 0; y < height; y += 1) {
+      const row: Frame[] = [];
+      for (let x = 0; x < width; x += 1) {
+        row.push(new Frame(imageWidth, imageHeight));
+      }
+      this.frames.push(row);
+    }
     this.width = width;
     this.height = height;
   }

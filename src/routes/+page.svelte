@@ -5,7 +5,7 @@
 	import Document from '../document/document';
 	import Color from '../drawing/color';
 
-	let workingDocument = new Document(16, 16);
+	let workingDocument = new Document(3, 4, 3, 3);
 
 	let selectedColor: Color = new Color(255, 0, 0, 255);
 </script>
@@ -26,7 +26,9 @@
 				workingDocument = workingDocument;
 			}}
 		/>
-		<FrameSelector {workingDocument} />
+		<div class="h-48">
+			<FrameSelector {workingDocument} />
+		</div>
 	</div>
 	<div class="bg-base-100"><ColorPanel bind:color={selectedColor} /></div>
 </div>
