@@ -6,6 +6,7 @@
 	import Color from '../drawing/color';
 
 	let workingDocument = new Document(3, 4, 3, 3);
+	let currentFrame = { x: 0, y: 0 };
 
 	let selectedColor: Color = new Color(255, 0, 0, 255);
 </script>
@@ -17,17 +18,21 @@
 	</div>
 	<div class="w-full bg-base-100 flex flex-col">
 		<Renderer
-			frame={workingDocument.frames.getFrame(0, 0)}
+			frame={workingDocument.frames.getFrame(currentFrame.x, currentFrame.y)}
 			changePixel={(i) => {
-				workingDocument.frames.getFrame(0, 0).data[i * 4] = selectedColor.r;
-				workingDocument.frames.getFrame(0, 0).data[i * 4 + 1] = selectedColor.g;
-				workingDocument.frames.getFrame(0, 0).data[i * 4 + 2] = selectedColor.b;
-				workingDocument.frames.getFrame(0, 0).data[i * 4 + 3] = selectedColor.a;
+				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4] =
+					selectedColor.r;
+				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 1] =
+					selectedColor.g;
+				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 2] =
+					selectedColor.b;
+				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 3] =
+					selectedColor.a;
 				workingDocument = workingDocument;
 			}}
 		/>
 		<div class="h-48">
-			<FrameSelector {workingDocument} />
+			<FrameSelector {workingDocument} bind:currentFrame />
 		</div>
 	</div>
 	<div class="bg-base-100"><ColorPanel bind:color={selectedColor} /></div>

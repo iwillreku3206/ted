@@ -10,8 +10,13 @@
 
 	export let scale = 1;
 
-	export let x = defaultFrameX;
-	export let y = defaultFrameY;
+	let x = defaultFrameX;
+	let y = defaultFrameY;
+  
+  export let currentFrame;
+
+	$: currentFrame = { x, y };
+	
 
 	$: workingDocument && updateImageData();
 
@@ -67,7 +72,9 @@
 						width={workingDocument.width * scale}
 						height={workingDocument.height * scale}
 						alt=""
-						class="preview-image"
+						class={`preview-image ${
+							x === imageX && y === imageY ? 'border-2 border-primary' : 'border-0'
+						} ${x} ${y}`}
 						on:click={() => setXY(imageX, imageY)}
 						on:keydown={() => setXY(imageX, imageY)}
 						src={imageData[imageY * workingDocument.frames.width + imageX]}
