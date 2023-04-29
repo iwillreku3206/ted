@@ -12,6 +12,8 @@
 	export let x = defaultFrameX;
 	export let y = defaultFrameY;
 
+  $: workingDocument && updateImageData()
+
 	let imageData: string[] = [];
 
 	function updateImageData() {
@@ -34,7 +36,7 @@
 			});
 		});
 
-    imageData = imageData
+		imageData = imageData;
 
 		return true;
 	}
@@ -55,6 +57,8 @@
 					<img
 						width={workingDocument.width * scale}
 						height={workingDocument.height * scale}
+						alt=""
+						class="preview-image"
 						src={imageData[imageY * workingDocument.frames.width + imageX]}
 					/>
 				</div>
@@ -62,3 +66,9 @@
 		</div>
 	{/each}
 </div>
+
+<style>
+	.preview-image {
+		image-rendering: pixelated;
+	}
+</style>
