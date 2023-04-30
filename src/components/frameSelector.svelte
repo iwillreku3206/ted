@@ -8,7 +8,9 @@
 
 	export let workingDocument: Document;
 
-	export let scale = 1;
+	let min_scale = Math.round(48 / Math.max(workingDocument.width, workingDocument.height));
+
+	export let scale = min_scale;
 
 	let x = defaultFrameX;
 	let y = defaultFrameY;
@@ -57,31 +59,36 @@
 	});
 </script>
 
-<button on:click={updateImageData}>Update</button>
-<input type="range" bind:value={scale} min="1" max="10" step="1" />
+<div class="h-full flex flex-col">
+	<div class="flex-grow-0 flex-shrink basis-auto">
+		<button on:click={updateImageData}>Update</button>
+		<input type="range" bind:value={scale} min={min_scale} max="20" step="0.01" />
 
-<button on:click={() => console.log(imageData)}>test</button>
-
-<div class="flex flex-col gap-2">
-	{#each { length: workingDocument.frames.height } as _, imageY}
-		<div class="flex flex-row gap-2">
-			{#each { length: workingDocument.frames.width } as _, imageX}
-				<div>
-					<img
-						width={workingDocument.width * scale}
-						height={workingDocument.height * scale}
-						alt=""
-						class={`preview-image ${
-							x === imageX && y === imageY ? 'border-2 border-primary' : 'border-0'
-						} ${x} ${y}`}
-						on:click={() => setXY(imageX, imageY)}
-						on:keydown={() => setXY(imageX, imageY)}
-						src={imageData[imageY * workingDocument.frames.width + imageX]}
-					/>
-				</div>
-			{/each}
-		</div>
-	{/each}
+		<button on:click={() => console.log(imageData)}>test</button>
+	</div>
+  <div class="flex-auto overflow-scroll">
+	<div class="flex flex-col gap-2">
+		{#each { length: workingDocument.frames.height } as _, imageY}
+			<div class="flex flex-row gap-2">
+				{#each { length: workingDocument.frames.width } as _, imageX}
+					<div>
+						<img
+							width={workingDocument.width * scale}
+							height={workingDocument.height * scale}
+							alt=""
+							class={`preview-image ${
+								x === imageX && y === imageY ? 'border-2 border-primary' : 'border-0'
+							} ${x} ${y}`}
+							on:click={() => setXY(imageX, imageY)}
+							on:keydown={() => setXY(imageX, imageY)}
+							src={imageData[imageY * workingDocument.frames.width + imageX]}
+						/>
+					</div>
+				{/each}
+			</div>
+		{/each}
+	</div>
+  </div>
 </div>
 
 <style>
