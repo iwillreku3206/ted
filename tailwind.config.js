@@ -8,6 +8,9 @@ export default {
       },
       borderWidth: {
         '1/2': '0.5px'
+      },
+      backgroundImage: {
+        'transparent-checkerboard': 'url("/assets/checkerboard.svg")'
       }
     },
   },

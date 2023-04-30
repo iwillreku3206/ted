@@ -84,6 +84,14 @@
 	)}, ${color.s.toFixed(0)}%, 100%))`}
 	bind:value={color.l}
 />
+<input
+	type="range"
+	min="0"
+	max="255"
+	class="slider bg-transparent-checkerboard w-full h-2"
+	style={`background: linear-gradient(to left, ${color.toRGBHex()}ff, ${color.toRGBHex()}00), url("/assets/checkerboard.svg")`}
+	bind:value={color.a}
+/>
 
 <style>
 	.color-picker-hsl {
