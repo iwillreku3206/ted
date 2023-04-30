@@ -2,44 +2,37 @@
 	import { onMount } from 'svelte';
 	import type Document from '../document/document';
 	import { browser } from '$app/environment';
+	import { currentDocumentStore } from '../stores/documentStore';
+	import { currentFrameStore } from '../stores/currentFrameStore';
 
-	export let defaultFrameX = 0;
-	export let defaultFrameY = 0;
+	let currentDocument = $currentDocumentStore;
+	let currentFrame = $currentFrameStore;
 
-	export let workingDocument: Document;
-
-	let min_scale = Math.round(48 / Math.max(workingDocument.width, workingDocument.height));
+	$: min_scale = Math.round(48 / Math.max(currentDocument.width, currentDocument.height));
 
 	export let scale = min_scale;
 
-	let x = defaultFrameX;
-	let y = defaultFrameY;
-
-	export let currentFrame;
-
-	$: currentFrame = { x, y };
-
-	$: workingDocument && updateImageData();
+	$: currentDocument && updateImageData();
 
 	let imageData: string[] = [];
 
 	function updateImageData() {
 		if (!browser) return;
-		workingDocument.frames.frames.forEach((row, y) => {
+		currentDocument.frames.frames.forEach((row, y) => {
 			row.forEach((_, x) => {
-				const canvas = new OffscreenCanvas(workingDocument.width, workingDocument.height);
+				const canvas = new OffscreenCanvas(currentDocument.width, currentDocument.height);
 				const ctx = canvas.getContext('2d');
 				if (!ctx) return;
-				const data = ctx.createImageData(workingDocument.width, workingDocument.height);
+				const data = ctx.createImageData(currentDocument.width, currentDocument.height);
 
-				workingDocument.frames.frames[y][x].data.forEach((byte, i) => {
+				currentDocument.frames.frames[y][x].data.forEach((byte, i) => {
 					data.data[i] = byte;
 				});
 				ctx.putImageData(data, 0, 0);
 
 				canvas.convertToBlob().then((blob) => {
 					const url = URL.createObjectURL(blob);
-					imageData[y * workingDocument.frames.width + x] = url.toString();
+					imageData[y * currentDocument.frames.width + x] = url.toString();
 				});
 			});
 		});
@@ -50,8 +43,7 @@
 	}
 
 	function setXY(_x: number, _y: number) {
-		x = _x;
-		y = _y;
+		currentFrameStore.set({ x: _x, y: _y });
 	}
 
 	onMount(() => {
@@ -59,36 +51,38 @@
 	});
 </script>
 
-<div class="h-full flex flex-col">
+<div class="h-full flex flex-col flex-grow-0 flex-shrink">
 	<div class="flex-grow-0 flex-shrink basis-auto">
 		<button on:click={updateImageData}>Update</button>
-		<input type="range" bind:value={scale} min={min_scale} max="20" step="0.01" />
+		<input type="range" bind:value={scale} min={min_scale} max={min_scale * 2} step="0.01" />
 
 		<button on:click={() => console.log(imageData)}>test</button>
 	</div>
-  <div class="flex-auto overflow-scroll">
-	<div class="flex flex-col gap-2">
-		{#each { length: workingDocument.frames.height } as _, imageY}
-			<div class="flex flex-row gap-2">
-				{#each { length: workingDocument.frames.width } as _, imageX}
-					<div>
-						<img
-							width={workingDocument.width * scale}
-							height={workingDocument.height * scale}
-							alt=""
-							class={`preview-image ${
-								x === imageX && y === imageY ? 'border-2 border-primary' : 'border-0'
-							} ${x} ${y}`}
-							on:click={() => setXY(imageX, imageY)}
-							on:keydown={() => setXY(imageX, imageY)}
-							src={imageData[imageY * workingDocument.frames.width + imageX]}
-						/>
-					</div>
-				{/each}
-			</div>
-		{/each}
+	<div class="flex-auto overflow-scroll">
+		<div class="flex flex-col gap-2 p-4 pb-8">
+			{#each { length: currentDocument.frames.height } as _, imageY}
+				<div class="flex flex-row gap-2">
+					{#each { length: currentDocument.frames.width } as _, imageX}
+						<div>
+							<img
+								width={currentDocument.width * scale}
+								height={currentDocument.height * scale}
+								alt=""
+								class={`preview-image ${
+									currentFrame.x === imageX && currentFrame.y === imageY
+										? 'border-2 border-primary'
+										: 'border-0'
+								}`}
+								on:click={() => setXY(imageX, imageY)}
+								on:keydown={() => setXY(imageX, imageY)}
+								src={imageData[imageY * currentDocument.frames.width + imageX]}
+							/>
+						</div>
+					{/each}
+				</div>
+			{/each}
+		</div>
 	</div>
-  </div>
 </div>
 
 <style>

@@ -4,7 +4,7 @@ import type Color from '../color';
 export interface BrushOptions {
   name: string;
   args: Map<string, BrushArgumentType>;
-  fn: (frame: Uint8Array, color: Color, args: Map<string, BrushArgumentJSType>) => Uint8Array;
+  fn: (frame: Frame, color: Color, x: number, y: number, args: Map<string, BrushArgumentJSType>) => Frame;
 }
 
 export type BrushArgumentType = 'string' | 'number' | 'boolean' | 'color' | 'image';
@@ -13,7 +13,7 @@ export type BrushArgumentJSType = string | number | boolean | Color | Uint8Array
 export default class Brush {
   public name: string;
   public args: Map<string, BrushArgumentType>;
-   fn: (frame: Uint8Array, color: Color, args: Map<string, BrushArgumentJSType>) => Uint8Array;
+  fn: (frame: Frame, color: Color, x: number, y: number, args: Map<string, BrushArgumentJSType>) => Frame;
 
   constructor(opts: BrushOptions) {
     this.name = opts.name;
@@ -21,7 +21,7 @@ export default class Brush {
     this.fn = opts.fn;
   }
 
-  public apply(frame: Frame, color: Color, args: Map<string, BrushArgumentJSType>): Uint8Array {
-    return this.fn(frame.data, color, args);
+  public apply(frame: Frame, color: Color, x: number, y: number, args: Map<string, BrushArgumentJSType>): Frame {
+    return this.fn(frame, color, x, y, args);
   }
 }

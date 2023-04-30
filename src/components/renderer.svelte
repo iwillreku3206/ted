@@ -1,8 +1,11 @@
 <script lang="ts">
+	import type Document from '../document/document';
 	import type Frame from '../document/frame';
+	import { currentFrameStore } from '../stores/currentFrameStore';
+	import { currentDocumentStore } from '../stores/documentStore';
 
-	export let frame: Frame;
 
+	$: frame = $currentDocumentStore.frames.getFrame($currentFrameStore.x, $currentFrameStore.y);
 	$: pixels = frame.asColorArray().map((c) => c.toRGBAHex() || '#00000000');
 	$: width = frame.width;
 	$: height = frame.height;
@@ -79,36 +82,34 @@
 		{#each { length: height } as _, y}
 			<div class="flex flex-row">
 				{#each { length: width } as _, x}
-        <div style="background-image: url('/assets/checkerboard.svg');">
-					<div
-						class="w-12 h-12 border-r-1/2 border-b-1/2 border-gray-300"
-						on:click={() => changePixel(y * width + x)}
-						on:mousedown={(e) => {
-							e.preventDefault();
-							changePixel(y * width + x);
-							mouseDown = true;
-						}}
-						on:mouseover={(e) => {
-							e.preventDefault();
-							mouseDown && changePixel(y * width + x);
-						}}
-						on:mouseup={(e) => {
-							e.preventDefault();
-							mouseDown = false;
-						}}
-						on:keydown={(e) => {
-							if (e.key === 'Enter') {
+					<div style="background-image: url('/assets/checkerboard.svg');">
+						<div
+							class="w-12 h-12 border-r-1/2 border-b-1/2 border-gray-300"
+							on:click={() => changePixel(y * width + x)}
+							on:mousedown={(e) => {
+								e.preventDefault();
 								changePixel(y * width + x);
-							}
-						}}
-						on:focus={() => {
-							/**/
-						}}
-						style={`background-color: ${
-							pixels[y * width + x]
-						}; `}
-					/>
-          </div>
+								mouseDown = true;
+							}}
+							on:mouseover={(e) => {
+								e.preventDefault();
+								mouseDown && changePixel(y * width + x);
+							}}
+							on:mouseup={(e) => {
+								e.preventDefault();
+								mouseDown = false;
+							}}
+							on:keydown={(e) => {
+								if (e.key === 'Enter') {
+									changePixel(y * width + x);
+								}
+							}}
+							on:focus={() => {
+								/**/
+							}}
+							style={`background-color: ${pixels[y * width + x]}; `}
+						/>
+					</div>
 				{/each}
 			</div>
 		{/each}

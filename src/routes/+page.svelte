@@ -2,38 +2,34 @@
 	import ColorPanel from '../components/colorPanel.svelte';
 	import FrameSelector from '../components/frameSelector.svelte';
 	import Renderer from '../components/renderer.svelte';
-	import Document from '../document/document';
-	import Color from '../drawing/color';
+	import PixelBrush from '../drawing/brush/pixel';
 
-	let workingDocument = new Document(3, 4, 3, 3);
-	let currentFrame = { x: 0, y: 0 };
-
-	let selectedColor: Color = new Color(255, 0, 0, 255);
+	import { currentDocumentStore } from '../stores/documentStore';
+	import { currentFrameStore } from '../stores/currentFrameStore';
+	import { primaryColorStore } from '../stores/colorStore';
 </script>
 
 <div class="flex flex-row gap-1 bg-base-200 h-full">
-	<div class="w-fit bg-base-100">
-		Tools
-		<button on:click={() => console.log(workingDocument)}>Debug</button>
-	</div>
+	<div class="w-fit bg-base-100">Tools</div>
 	<div class="w-full bg-base-100 flex flex-col">
 		<Renderer
-			frame={workingDocument.frames.getFrame(currentFrame.x, currentFrame.y)}
 			changePixel={(i) => {
-				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4] =
-					selectedColor.r;
-				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 1] =
-					selectedColor.g;
-				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 2] =
-					selectedColor.b;
-				workingDocument.frames.getFrame(currentFrame.x, currentFrame.y).data[i * 4 + 3] =
-					selectedColor.a;
-				workingDocument = workingDocument;
+				currentDocumentStore.update((doc) => {
+					const { x, y } = $currentFrameStore;
+					PixelBrush.apply(
+						doc.frames.frames[y][x],
+						$primaryColorStore,
+						i % doc.width,
+						Math.floor(i / doc.width),
+						new Map()
+					);
+					return doc;
+				});
 			}}
 		/>
 		<div class="h-48">
-			<FrameSelector {workingDocument} bind:currentFrame />
+			<FrameSelector />
 		</div>
 	</div>
-	<div class="bg-base-100"><ColorPanel bind:color={selectedColor} /></div>
+	<div class="bg-base-100"><ColorPanel /></div>
 </div>
