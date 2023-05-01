@@ -1,8 +1,7 @@
 <script lang="ts">
-	import ColorPanel from '../components/colorPanel.svelte';
+	import ColorPanel from '../components/color/colorPanel.svelte';
 	import FrameSelector from '../components/frameSelector.svelte';
 	import Renderer from '../components/renderer.svelte';
-	import PixelBrush from '../drawing/brush/pixel';
 
 	import { currentDocumentStore } from '../stores/documentStore';
 	import { currentFrameStore } from '../stores/currentFrameStore';
@@ -28,7 +27,7 @@
 								Math.floor(i / doc.width),
 								new Map()
 							);
-              }
+						}
 						return doc;
 					});
 				}

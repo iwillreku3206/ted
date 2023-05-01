@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type Color from '../drawing/color';
+	import type Color from '../../drawing/color';
 
 	let mouseDown = false;
 	let picker: HTMLDivElement;

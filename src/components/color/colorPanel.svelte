@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Color from '../drawing/color';
-	import { primaryColorStore } from '../stores/colorStore';
+	import Color from '../../drawing/color';
+	import { primaryColorStore } from '../../stores/colorStore';
 	import HslColorPicker from './hslColorPicker.svelte';
 
 	export let color = new Color(5, 127, 127, 255);
