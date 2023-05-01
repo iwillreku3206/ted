@@ -5,34 +5,37 @@
 	import { currentDocumentStore } from '../stores/documentStore';
 	import { currentFrameStore } from '../stores/currentFrameStore';
 
-	let currentDocument = $currentDocumentStore;
-	let currentFrame = $currentFrameStore;
-
-	$: min_scale = Math.round(48 / Math.max(currentDocument.width, currentDocument.height));
+	$: min_scale = Math.round(
+		48 / Math.max($currentDocumentStore.width, $currentDocumentStore.height)
+	);
 
 	export let scale = min_scale;
+	$: scale = Math.max(scale, min_scale);
 
-	$: currentDocument && updateImageData();
+	$: $currentDocumentStore && updateImageData();
 
 	let imageData: string[] = [];
 
 	function updateImageData() {
 		if (!browser) return;
-		currentDocument.frames.frames.forEach((row, y) => {
+		$currentDocumentStore.frames.frames.forEach((row, y) => {
 			row.forEach((_, x) => {
-				const canvas = new OffscreenCanvas(currentDocument.width, currentDocument.height);
+				const canvas = new OffscreenCanvas(
+					$currentDocumentStore.width,
+					$currentDocumentStore.height
+				);
 				const ctx = canvas.getContext('2d');
 				if (!ctx) return;
-				const data = ctx.createImageData(currentDocument.width, currentDocument.height);
+				const data = ctx.createImageData($currentDocumentStore.width, $currentDocumentStore.height);
 
-				currentDocument.frames.frames[y][x].data.forEach((byte, i) => {
+				$currentDocumentStore.frames.frames[y][x].data.forEach((byte, i) => {
 					data.data[i] = byte;
 				});
 				ctx.putImageData(data, 0, 0);
 
 				canvas.convertToBlob().then((blob) => {
 					const url = URL.createObjectURL(blob);
-					imageData[y * currentDocument.frames.width + x] = url.toString();
+					imageData[y * $currentDocumentStore.frames.width + x] = url.toString();
 				});
 			});
 		});
@@ -59,23 +62,23 @@
 		<button on:click={() => console.log(imageData)}>test</button>
 	</div>
 	<div class="flex-auto overflow-scroll">
-		<div class="flex flex-col gap-2 p-4 pb-8">
-			{#each { length: currentDocument.frames.height } as _, imageY}
-				<div class="flex flex-row gap-2">
-					{#each { length: currentDocument.frames.width } as _, imageX}
+		<div class="flex flex-col p-4 pb-12">
+			{#each { length: $currentDocumentStore.frames.height } as _, imageY}
+				<div class="flex flex-row">
+					{#each { length: $currentDocumentStore.frames.width } as _, imageX}
 						<div>
 							<img
-								width={currentDocument.width * scale}
-								height={currentDocument.height * scale}
+								width={$currentDocumentStore.width * scale}
+								height={$currentDocumentStore.height * scale}
 								alt=""
 								class={`preview-image ${
-									currentFrame.x === imageX && currentFrame.y === imageY
-										? 'border-2 border-primary'
+									$currentFrameStore.x === imageX && $currentFrameStore.y === imageY
+										? 'border-1 border-primary'
 										: 'border-0'
-								}`}
+								} outline outline-4 outline-base-300`}
 								on:click={() => setXY(imageX, imageY)}
 								on:keydown={() => setXY(imageX, imageY)}
-								src={imageData[imageY * currentDocument.frames.width + imageX]}
+								src={imageData[imageY * $currentDocumentStore.frames.width + imageX]}
 							/>
 						</div>
 					{/each}

@@ -50,7 +50,7 @@
 										{#if 'isLabel' in subsubitem && subsubitem.isLabel}
 											<li><label for={subsubitem.labelFor}>{subsubitem.label}</label></li>
 										{:else if 'action' in subsubitem}
-											<li><button on:click={subsubitem.action}>{subitem.label}</button></li>
+											<li><button on:click={subsubitem.action}>{subsubitem.label}</button></li>
 										{/if}
 									{/each}
 								</ul>

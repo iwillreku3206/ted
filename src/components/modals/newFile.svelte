@@ -7,12 +7,17 @@
 	let width = 16;
 	let height = 16;
 
+	let rows = 1;
+	let columns = 1;
+
 	const widthInputIdentifier = uniqueIdentifier('width-input');
 	const heightInputIdentifier = uniqueIdentifier('height-input');
+	const rowInputIdentifier = uniqueIdentifier('row-input');
+	const columnInputIdentifier = uniqueIdentifier('column-input');
 
 	function newDocument() {
 		currentFrameStore.set({ x: 0, y: 0 });
-		currentDocumentStore.set(new Document(width, height));
+		currentDocumentStore.set(new Document(width, height, columns, rows));
 	}
 </script>
 
@@ -28,6 +33,28 @@
 			<div class="flex flex-row w-full gap-2">
 				<label for={heightInputIdentifier} class="w-16 text-right">Height: </label>
 				<span><input type="number" name="" id={widthInputIdentifier} bind:value={height} />px</span>
+			</div>
+			<div class="flex flex-row w-full gap-2">
+				<label for={rowInputIdentifier} class="w-16 text-right">Rows: </label>
+				<input
+					type="number"
+					name=""
+					id={rowInputIdentifier}
+					bind:value={rows}
+					min="1"
+					placeholder="1"
+				/>
+			</div>
+			<div class="flex flex-row w-full gap-2">
+				<label for={columnInputIdentifier} class="w-16 text-right">Columns: </label>
+				<input
+					type="number"
+					name=""
+					id={columnInputIdentifier}
+					bind:value={columns}
+					min="1"
+					placeholder="1"
+				/>
 			</div>
 		</div>
 		<div class="modal-action">
