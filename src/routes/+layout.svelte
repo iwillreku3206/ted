@@ -11,9 +11,8 @@
 				children: [
 					{
 						label: 'New',
-						action: () => {
-							console.log('New');
-						}
+            isLabel: true,
+            labelFor: 'new-file-modal'
 					},
 					{
 						label: 'Recent...',

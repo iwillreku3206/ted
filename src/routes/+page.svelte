@@ -8,10 +8,11 @@
 	import { primaryColorStore } from '../stores/colorStore';
 	import { currentToolStore } from '../stores/toolStore';
 	import Toolbox from '../components/toolbox.svelte';
+	import NewFile from '../components/modals/newFile.svelte';
 </script>
 
 <div class="flex flex-row gap-1 bg-base-200 h-full">
-	<div class="w-24 bg-base-100"><Toolbox /></div>
+	<div class="w-24 bg-base-100"><Toolbox /><NewFile /></div>
 	<div class="w-full bg-base-100 flex flex-col">
 		<Renderer
 			changePixel={(i) => {
