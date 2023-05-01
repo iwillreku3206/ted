@@ -4,7 +4,6 @@
 	import { currentFrameStore } from '../stores/currentFrameStore';
 	import { currentDocumentStore } from '../stores/documentStore';
 
-
 	$: frame = $currentDocumentStore.frames.getFrame($currentFrameStore.x, $currentFrameStore.y);
 	$: pixels = frame.asColorArray().map((c) => c.toRGBAHex() || '#00000000');
 	$: width = frame.width;
@@ -74,7 +73,7 @@
 />
 
 <div
-	class="grid place-items-center h-full overflow-clip"
+	class="grid place-items-center shrink overflow-hidden"
 	on:mousedown={rendererMouseDown}
 	on:wheel={rendererOnWheel}
 >

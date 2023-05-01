@@ -13,7 +13,7 @@
 
 <div class="flex flex-row gap-1 bg-base-200 h-full">
 	<div class="w-24 bg-base-100"><Toolbox /><NewFile /></div>
-	<div class="w-full bg-base-100 flex flex-col">
+	<div class="w-full bg-base-100 flex flex-col overflow-auto">
 		<Renderer
 			changePixel={(i) => {
 				if ($currentToolStore.type === 'brush') {
