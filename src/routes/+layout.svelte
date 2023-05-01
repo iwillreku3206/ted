@@ -11,8 +11,8 @@
 				children: [
 					{
 						label: 'New',
-            isLabel: true,
-            labelFor: 'new-file-modal'
+						isLabel: true,
+						labelFor: 'new-file-modal'
 					},
 					{
 						label: 'Recent...',
@@ -32,7 +32,58 @@
 						]
 					}
 				]
-			}
+			},
+			{
+				label: 'Edit',
+				children: [
+					{
+						label: 'Undo',
+						action: () => {
+							console.log('Undo');
+						}
+					},
+					{
+						label: 'Redo',
+						action: () => {
+							console.log('Redo');
+						}
+					}
+				]
+			},
+			{
+				label: 'View',
+				children: [
+					{
+						label: 'Zoom In',
+						action: () => {
+							console.log('Zoom In');
+						}
+					},
+					{
+						label: 'Zoom Out',
+						action: () => {
+							console.log('Zoom Out');
+						}
+					},
+					{
+						label: 'Reset Zoom',
+						action: () => {
+							console.log('Reset Zoom');
+						}
+					}
+				]
+			},
+      {
+        label: 'Help',
+        children: [
+          {
+            label: 'About',
+            action: () => {
+              console.log('About');
+            }
+          }
+        ]
+      }
 		]}
 	/>
 	<slot />
