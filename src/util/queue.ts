@@ -9,6 +9,10 @@ export default class Queue<T> {
     this.data.push(item);
   }
 
+  public clear() {
+    this.data = [];
+  }
+
   public remove(): T | undefined {
     return this.data.pop();
   }

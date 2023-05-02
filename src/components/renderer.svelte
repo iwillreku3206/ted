@@ -18,6 +18,8 @@
 	}
 
 	function rendererMouseDown(e: MouseEvent) {
+		frame.undoStates.add(new Uint8Array(frame.data));
+		frame.redoStates.clear();
 		if (e.button === 1) {
 			middleClickDown = true;
 		}

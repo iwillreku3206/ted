@@ -4,6 +4,7 @@
 	import type { ComponentProps } from 'svelte';
 	import { dev } from '$app/environment';
 	import { currentDocumentStore } from '../stores/documentStore';
+	import { undo } from '../util/undoRedo';
 
 	const items: ComponentProps<Menubar>['items'] = [
 		{
@@ -38,9 +39,7 @@
 			children: [
 				{
 					label: 'Undo',
-					action: () => {
-						console.log('Undo');
-					}
+					action: undo
 				},
 				{
 					label: 'Redo',
@@ -111,12 +110,12 @@
 								console.log(JSON.stringify($currentDocumentStore));
 							}
 						},
-            {
-              label: 'Document Store (JSON length)',
-              action: () => {
-                console.log(JSON.stringify($currentDocumentStore).length);
-              }
-            }
+						{
+							label: 'Document Store (JSON length)',
+							action: () => {
+								console.log(JSON.stringify($currentDocumentStore).length);
+							}
+						}
 					]
 				}
 			]
