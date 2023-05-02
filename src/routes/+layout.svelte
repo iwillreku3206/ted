@@ -4,7 +4,7 @@
 	import type { ComponentProps } from 'svelte';
 	import { dev } from '$app/environment';
 	import { currentDocumentStore } from '../stores/documentStore';
-	import { undo } from '../util/undoRedo';
+	import { redo, undo } from '../util/undoRedo';
 
 	const items: ComponentProps<Menubar>['items'] = [
 		{
@@ -43,9 +43,7 @@
 				},
 				{
 					label: 'Redo',
-					action: () => {
-						console.log('Redo');
-					}
+					action: redo
 				}
 			]
 		},

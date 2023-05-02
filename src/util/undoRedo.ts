@@ -13,6 +13,21 @@ export function undo() {
       frame.data = prev
     }
 
-      return document
+    return document
+  })
+}
+
+export function redo() {
+  currentDocumentStore.update(document => {
+    const { x, y } = get(currentFrameStore)
+    const frame = document.frames.frames[y][x]
+    const next = frame.redoStates.remove()
+
+    if (next) {
+      frame.undoStates.add(frame.data)
+      frame.data = next
+    }
+
+    return document
   })
 }
