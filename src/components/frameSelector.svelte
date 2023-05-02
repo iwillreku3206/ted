@@ -18,26 +18,13 @@
 
 	function updateImageData() {
 		if (!browser) return;
-		$currentDocumentStore.frames.frames.forEach((row, y) => {
-			row.forEach((_, x) => {
-				const canvas = new OffscreenCanvas(
-					$currentDocumentStore.width,
-					$currentDocumentStore.height
-				);
-				const ctx = canvas.getContext('2d');
-				if (!ctx) return;
-				const data = ctx.createImageData($currentDocumentStore.width, $currentDocumentStore.height);
-
-				$currentDocumentStore.frames.frames[y][x].data.forEach((byte, i) => {
-					data.data[i] = byte;
-				});
-				ctx.putImageData(data, 0, 0);
-
-				canvas.convertToBlob().then((blob) => {
-					const url = URL.createObjectURL(blob);
-					imageData[y * $currentDocumentStore.frames.width + x] = url.toString();
-				});
-			});
+		import('@silvia-odwyer/photon').then((photon) => {
+			const image = new photon.PhotonImage(
+				$currentDocumentStore.frames.frames[$currentFrameStore.y][$currentFrameStore.x].data,
+				$currentDocumentStore.width,
+				$currentDocumentStore.height
+			);
+			imageData[$currentFrameStore.y * $currentDocumentStore.frames.width + $currentFrameStore.x] = image.get_base64();
 		});
 
 		imageData = imageData;
