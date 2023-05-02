@@ -18,8 +18,6 @@
 	}
 
 	function rendererMouseDown(e: MouseEvent) {
-		frame.undoStates.add(new Uint8Array(frame.data));
-		frame.redoStates.clear();
 		if (e.button === 1) {
 			middleClickDown = true;
 		}
@@ -88,9 +86,15 @@
 							class="w-12 h-12 border-r-1/2 border-b-1/2 border-gray-300"
 							on:click={() => changePixel(y * width + x)}
 							on:mousedown={(e) => {
-								e.preventDefault();
-								changePixel(y * width + x);
-								mouseDown = true;
+								if (e.button === 0) {
+									e.preventDefault();
+									
+                  frame.undoStates.add(new Uint8Array(frame.data));
+									frame.redoStates.clear();
+
+									changePixel(y * width + x);
+									mouseDown = true;
+								}
 							}}
 							on:mouseover={(e) => {
 								e.preventDefault();
