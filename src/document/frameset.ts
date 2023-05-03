@@ -49,4 +49,12 @@ export default class Frameset {
     this.frames.pop();
     this.height -= 1;
   }
+
+  public toSmallArray() {
+    return this.frames.map((row) => {
+      return row.map((frame) => {
+        return new Uint8Array(frame.data);
+      });
+    })
+  }
 }

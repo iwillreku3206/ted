@@ -5,6 +5,8 @@
 	import { dev } from '$app/environment';
 	import { currentDocumentStore } from '../stores/documentStore';
 	import { redo, undo } from '../util/undoRedo';
+	import downloadFile from '../util/downloadFile';
+	import readLocalFile from '../util/readLocalFile';
 
 	const items: ComponentProps<Menubar>['items'] = [
 		{
@@ -15,6 +17,10 @@
 					isLabel: true,
 					labelFor: 'new-file-modal'
 				},
+        {
+          label: 'Open',
+          action: readLocalFile
+        },
 				{
 					label: 'Recent...',
 					children: [
@@ -31,6 +37,12 @@
 							}
 						}
 					]
+				},
+				{
+					label: 'Save',
+					action: () => {
+						downloadFile($currentDocumentStore.toBSON(), 'file.ted', 'image/x-ted-document');
+					}
 				}
 			]
 		},
