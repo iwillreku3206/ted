@@ -7,7 +7,8 @@ export default {
         menu: '12rem'
       },
       borderWidth: {
-        '1/2': '0.5px'
+        '1/2': '0.5px',
+        '1': '1px',
       },
       backgroundImage: {
         'transparent-checkerboard': 'url("/assets/checkerboard.svg")'
