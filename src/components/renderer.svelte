@@ -77,19 +77,22 @@
 	on:mousedown={rendererMouseDown}
 	on:wheel={rendererOnWheel}
 >
-	<div style={`transform: translateX(${camX}px) translateY(${camY}px) scale(${zoom})`}>
+	<div
+		style={`transform: translateX(${camX}px) translateY(${camY}px) scale(${zoom}); background-size: 5%`}
+		class="bg-transparent-checkerboard"
+	>
 		{#each { length: height } as _, y}
 			<div class="flex flex-row">
 				{#each { length: width } as _, x}
-					<div style="background-image: url('/assets/checkerboard.svg');">
+					<div style="">
 						<div
 							class="w-12 h-12 border-r-1/2 border-b-1/2 border-gray-300"
 							on:click={() => changePixel(y * width + x)}
 							on:mousedown={(e) => {
 								if (e.button === 0) {
 									e.preventDefault();
-									
-                  frame.undoStates.add(new Uint8Array(frame.data));
+
+									frame.undoStates.add(new Uint8Array(frame.data));
 									frame.redoStates.clear();
 
 									changePixel(y * width + x);

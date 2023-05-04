@@ -3,8 +3,8 @@
      xmlns="http://www.w3.org/2000/svg">
 
   <rect width="8" height="8" x="0" y="0" fill="#999999" />
-  <rect width="8" height="8" x="8" y="0" fill="#444444" />
+  <rect width="8" height="8" x="8" y="0" fill="#666666" />
   <rect width="8" height="8" x="8" y="8" fill="#999999" />
-  <rect width="8" height="8" x="0" y="8" fill="#444444" />
+  <rect width="8" height="8" x="0" y="8" fill="#666666" />
 </svg>
 
