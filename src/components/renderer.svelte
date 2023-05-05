@@ -78,7 +78,7 @@
 	on:wheel={rendererOnWheel}
 >
 	<div
-		style={`transform: translateX(${camX}px) translateY(${camY}px) scale(${zoom}); background-size: 5%`}
+		style={`transform: translateX(${camX}px) translateY(${camY}px) scale(${zoom}); `}
 		class="bg-transparent-checkerboard"
 	>
 		{#each { length: height } as _, y}
