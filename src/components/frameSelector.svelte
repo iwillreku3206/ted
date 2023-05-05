@@ -6,11 +6,11 @@
 	import { currentFrameStore } from '../stores/currentFrameStore';
 
 	$: min_scale = Math.round(
-		48 / Math.max($currentDocumentStore.width, $currentDocumentStore.height)
+		64 / Math.max($currentDocumentStore.width, $currentDocumentStore.height)
 	);
 
 	export let scale = min_scale;
-	$: scale = Math.max(scale, min_scale);
+	$: scale = min_scale;
 
 	$: $currentDocumentStore && updateImageData();
 
@@ -24,7 +24,8 @@
 				$currentDocumentStore.width,
 				$currentDocumentStore.height
 			);
-			imageData[$currentFrameStore.y * $currentDocumentStore.frames.width + $currentFrameStore.x] = image.get_base64();
+			imageData[$currentFrameStore.y * $currentDocumentStore.frames.width + $currentFrameStore.x] =
+				image.get_base64();
 		});
 
 		imageData = imageData;
@@ -62,7 +63,7 @@
 									$currentFrameStore.x === imageX && $currentFrameStore.y === imageY
 										? 'border-1 border-primary'
 										: 'border-0'
-								} outline outline-4 outline-base-300`}
+								} outline outline-4 outline-base-300 bg-transparent-checkerboard`}
 								on:click={() => setXY(imageX, imageY)}
 								on:keydown={() => setXY(imageX, imageY)}
 								src={imageData[imageY * $currentDocumentStore.frames.width + imageX]}
@@ -78,6 +79,5 @@
 <style>
 	.preview-image {
 		image-rendering: pixelated;
-		background: url('/assets/checkerboard.svg');
 	}
 </style>
